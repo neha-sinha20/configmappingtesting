@@ -23,8 +23,8 @@ jobs:
 
       - name: Authenticate with Vault using URL and Token
         run: |
-          VAULT_URL="https://your-vault-url"
-          VAULT_TOKEN="your-vault-token"
+          VAULT_URL="${{ secrets.VAULT_URL }}"
+          VAULT_TOKEN="${{ secrets.VAULT_TOKEN }}"
           vault login -address=$VAULT_URL $VAULT_TOKEN
           
       - name: Put secret into Vault

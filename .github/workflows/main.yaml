@@ -19,6 +19,6 @@ jobs:
           url: ${{ secrets.VAULT_ADDR }}
           token: ${{ secrets.VAULT_TOKEN }}
           secrets: |
-              eam/dev/itus/additional-datasources-config | ADDITIONAL_DATASOURCE_CONFIG_JSON ;
+              /eam/dev/itus/additional-datasources-config  
 
       

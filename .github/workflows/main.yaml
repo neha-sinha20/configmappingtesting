@@ -21,7 +21,7 @@ jobs:
           unzip vault_1.8.1_linux_amd64.zip
           sudo mv vault /usr/local/bin/
 
-      - name: Authenticate with Vault using URL and Token  
+      - name: PUT secret from github secret to hashiCorp vault
         env:
           VAULT_URL: "${{ secrets.VAULT_URL }}"
           VAULT_TOKEN: "${{ secrets.VAULT_TOKEN }}"        

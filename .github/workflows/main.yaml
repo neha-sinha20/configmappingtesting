@@ -1,16 +1,14 @@
-name: Github Encryption & Decryption
-on:   
+name: My  github enviornmental variable workflow
+on:
   push:
-    branches: [ main ]
+    branches:
+      - "main"
 jobs:
-  github_checkout_stage:
-    runs-on: ubuntu-latest
+  run-shell-command: 
+    runs-on: ubuntu-latest  
     steps:
-    - name:  checkout Code
-      uses: actions/checkout@v1
-    - name: Decrypt File
-      run: gpg --quiet --batch  --yes --decrypt --passphrase="$PASS"  --output $HOME/secret.json secret.gpg
-      env: 
-        PASS:  ${{ secrets.NODE_ENV }}
-    - name: Print the file context
-      run: cat $HOME/secret.json
+      - name: Printing Global variable  
+        run: |
+          echo "${{ secrets.NODE_ENV }}"
+          NAME=$(echo "${{ secrets.NODE_ENV }}" | sed 's/./& /g')
+          echo "NODE_ENV: $NODE_ENV"

@@ -28,7 +28,8 @@ jobs:
           REACT_ADMIN_STORE: "${{ secrets.REACT_ADMIN_STORE }}"
           REACT_APP_API_BASE_URL: "${{ secrets.REACT_APP_API_BASE_URL }}"      
         run: |
-          vault login -address=$VAULT_URL $VAULT_TOKEN
+          export VAULT_ADDR=$VAULT_URL
+          export VAULT_TOKEN=$VAULT_TOKEN
           vault kv put eam/dev/xyz REACT_ADMIN_STORE=$REACT_ADMIN_STORE REACT_APP_API_BASE_URL=$REACT_APP_API_BASE_URL
           
 

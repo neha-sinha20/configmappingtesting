@@ -3,7 +3,7 @@ name: My GitHub environmental variable workflow
 on:
   push:
     branches:
-      - "master"
+      - "main"
 
 jobs:
   create-azure-keyvault:

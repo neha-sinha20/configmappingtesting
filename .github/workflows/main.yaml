@@ -8,7 +8,7 @@ on:
 jobs:
   put-secret-to-vault:
     runs-on: ubuntu-latest
-    environment: dev
+    environment: prod
 
     steps:
       - name: Checkout code
@@ -30,7 +30,7 @@ jobs:
         run: |
           export VAULT_ADDR=$VAULT_URL
           export VAULT_TOKEN=$VAULT_TOKEN
-          vault kv put eam/dev/xyz REACT_ADMIN_STORE=$REACT_ADMIN_STORE REACT_APP_API_BASE_URL=$REACT_APP_API_BASE_URL
+          vault kv put eam/prod/xyz REACT_ADMIN_STORE=$REACT_ADMIN_STORE REACT_APP_API_BASE_URL=$REACT_APP_API_BASE_URL
           
 
                   

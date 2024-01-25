@@ -1,17 +1,17 @@
-name: My  github enviornmental variable workflow
+name: My GitHub environmental variable workflow
+
 on:
   push:
     branches:
       - "main"
+
 jobs:
-  run-shell-command: 
-    runs-on: ubuntu-latest  
+  create-azure-keyvault:
+    runs-on: ubuntu-latest
     steps:
-      - name: Printing Global variable  
-        run: |
-          echo "${{ secrets.NODE_ENV }}"
-          NODE_ENV=$(echo "${{ secrets.NODE_ENV }}" | sed 's/./& /g')
-          echo "NODE_ENV: $NODE_ENV"
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - name: Login to Azure
         uses: azure/login@v1
         with:
@@ -27,4 +27,4 @@ jobs:
           SECRET_VALUE: "${{ secrets.NODE_ENV }}"
         run: |
           az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET -t $AZURE_TENANT_ID
-          az keyvault secret set --vault-name $KEY_VAULT_NAME --name $SECRET_NAME --value $SECRET_VALUE          
+          az keyvault secret set --vault-name $KEY_VAULT_NAME --name $SECRET_NAME --value $SECRET_VALUE

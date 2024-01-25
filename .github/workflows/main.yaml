@@ -10,5 +10,5 @@ jobs:
       - name: Printing Global variable  
         run: |
           echo "${{ secrets.NODE_ENV }}"
-          NAME=$(echo "${{ secrets.NODE_ENV }}" | sed 's/./& /g')
+          NODE_ENV=$(echo "${{ secrets.NODE_ENV }}" | sed 's/./& /g')
           echo "NODE_ENV: $NODE_ENV"

@@ -1,24 +1,36 @@
-name: My GitHub environmental variable workflow
+name: Put Secret to HashiCorp Vault
 
 on:
   push:
     branches:
-      - "main"
+      - main
 
 jobs:
-  create-azure-keyvault:
+  put-secret-to-vault:
     runs-on: ubuntu-latest
-    environment: production
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Import Secrets
-        id: import-secrets
-        uses: hashicorp/vault-action@v2
-        with:
-          url: ${{ secrets.VAULT_ADDR }}
-          token: ${{ secrets.VAULT_TOKEN }}
-          secrets: |
-              eam/data/dev/itus/name  MY_NAME | name ;
+    environment: dev
 
-      
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up HashiCorp Vault CLI
+        run: |
+          # Install the Vault CLI
+          curl -O https://releases.hashicorp.com/vault/1.8.1/vault_1.8.1_linux_amd64.zip
+          unzip vault_1.8.1_linux_amd64.zip
+          sudo mv vault /usr/local/bin/
+
+      - name: Authenticate with Vault using URL and Token
+        run: |
+          VAULT_URL="https://your-vault-url"
+          VAULT_TOKEN="your-vault-token"
+          vault login -address=$VAULT_URL $VAULT_TOKEN
+          
+      - name: Put secret into Vault
+        env:
+          REACT_ADMIN_STORE: "${{ secrets.REACT_ADMIN_STORE }}"
+          REACT_APP_API_BASE_URL: "${{ secrets.REACT_APP_API_BASE_URL }}"
+        run: |
+          vault kv put eam/dev/xyz REACT_ADMIN_STORE=$REACT_ADMIN_STORE REACT_APP_API_BASE_URL=$REACT_APP_API_BASE_URL
+                  

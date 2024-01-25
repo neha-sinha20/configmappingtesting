@@ -23,8 +23,8 @@ jobs:
           AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
           AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
           KEY_VAULT_NAME: "opstree-poc-vault"
-          SECRET_NAME: "NAME"
-          SECRET_VALUE: "${{ secrets.NAME }}"
+          SECRET_NAME: "DBHOST"
+          SECRET_VALUE: "${{ secrets.DB_HOST }}"
         run: |
           az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET -t $AZURE_TENANT_ID
           az keyvault secret set --vault-name $KEY_VAULT_NAME --name $SECRET_NAME --value $SECRET_VALUE

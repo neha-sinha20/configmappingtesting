@@ -1,0 +1,35 @@
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaConnector
+metadata:
+  name: authentication-outbox-connector
+  namespace: "${NAMESPACE}"
+  labels:
+    strimzi.io/cluster: kafka-connect
+spec:
+  class: io.debezium.connector.postgresql.PostgresConnector
+  tasksMax: 1
+  config:
+    database.hostname: "${POSTGRES_DB_HOSTNAME}"
+    database.port: 5432  
+    database.user: "${POSTGRES_DB_USER}"
+    database.password: "${POSTGRES_DB_PASSWORD}"
+    database.dbname: "${POSTGRES_DB_NAME_AUTHENTICATION}"
+    database.sslmode: disable
+    table.include.list: public.outbox
+    topic.prefix: authentication
+    plugin.name: pgoutput     
+    transforms: router
+    transforms.router.type: com.ontada.kafka.outbox.OutboxPostgresRouter
+    transforms.router.captureReadOperationMessages: true
+    transforms.router.dltTopicName: authentication.outbox.dlt
+    slot.name: authentication_outbox
+    tombstones.on.delete: false
+    predicates: IsHeartBeat
+    predicates.IsHeartBeat.type: org.apache.kafka.connect.transforms.predicates.TopicNameMatches
+    predicates.IsHeartBeat.pattern: authentication.public.outbox
+    transforms.router.predicate: IsHeartBeat
+    publication.autocreate.mode: filtered
+    heartbeat.interval.ms: 60000
+    database.initial.statements: CREATE TABLE IF NOT EXISTS public.authentication_outbox_heartbeat(last_heartbeat_ts TIMESTAMPTZ DEFAULT NOW() PRIMARY KEY); DELETE FROM public.authentication_outbox_heartbeat; insert into public.authentication_outbox_heartbeat values(now())
+    heartbeat.action.query: update public.authentication_outbox_heartbeat set last_heartbeat_ts = now()
